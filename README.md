@@ -18,6 +18,14 @@ Walking off the terrain eventually returns the player to the spawn point.
 
 ## Organization and configuration
 
+The **Rocks** node scatters 300 irregular procedural rocks: 210 small, 75 medium, and 15 large by default (70% / 25% / 5%). Sizes vary within each category, with randomized shape, gray shade, and rotation. Convex collision matches each rock, and placement avoids the spawn area, other rocks, and tree trunks. Player and third-person camera collision include trees and rocks.
+
+Select **Rocks** to configure count, small/medium fractions (large gets the remainder), radius ranges in meters, clearance, color, and seed. Keep small + medium fractions at or below 1. Disable **Randomize Seed** on both Forest and Rocks for repeatable placement. Generation is in `scripts/world/rocks.gd`; crowded settings can place fewer rocks with warnings.
+
+The world includes 220 procedural low-poly pine trees with varied sizes and foliage shades. Trunks have collision; foliage is decorative. Trees are grounded on the actual terrain collision, spaced apart, and excluded from a 14-meter radius around the player's spawn.
+
+Select **Forest** in the main scene to configure tree count, spacing, spawn clearance, edge margin, height, trunk/canopy radius, scale range, and colors. A new layout is generated each launch by default. Disable **Randomize Seed** and set **Forest Seed** for a repeatable layout. Trees generate at runtime; dense settings may place fewer trees and report a warning. Generation lives in `scripts/world/forest.gd`, separately from terrain and player controls.
+
 - `scenes/world/main.tscn`: world composition, sun, procedural sky, spawn position, and control hint.
 - `scripts/world/terrain.gd`: runtime mesh and matching triangle collision generation. Select Terrain in the main scene to configure size (default 300 × 300 meters), subdivisions, hill height/frequency, and color. Generation occurs when the game runs.
 - `scenes/player/player.tscn`: capsule character, facing marker, collision, and camera hierarchy.

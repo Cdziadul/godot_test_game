@@ -5,13 +5,48 @@ func _initialize() -> void:
 
 func run() -> void:
 	var world := load("res://scenes/world/main.tscn").instantiate() as Node3D
+	world.get_node("Forest").randomize_seed = false
+	world.get_node("Rocks").randomize_seed = false
 	root.add_child(world)
 	var player := world.get_node("Player") as CharacterBody3D
 	for frame in range(120):
 		await physics_frame
 	if not check(player.is_on_floor(), "Player lands on generated terrain"):
 		return
+	var forest := world.get_node("Forest")
+	var trees := forest.get_children()
+	if not check(trees.size() == forest.tree_count, "Requested tree count generated"):
+		return
+	for i in range(trees.size()):
+		var point: Vector3 = trees[i].global_position
+		if not check_silent(Vector2(point.x, point.z).length() >= forest.spawn_clearance, "Trees respect spawn clearance"):
+			return
+		if not check_silent(absf(point.x) <= 145.0 and absf(point.z) <= 145.0, "Trees stay inside terrain"):
+			return
+		for j in range(i):
+			var other: Vector3 = trees[j].global_position
+			if not check_silent(Vector2(point.x, point.z).distance_to(Vector2(other.x, other.z)) >= forest.minimum_spacing, "Trees respect minimum spacing"):
+				return
+	print("PASS: Tree placement bounds, spacing, and spawn clearance")
+	var trunk_center: Vector3 = trees[0].global_position + Vector3.UP
+	var ray := PhysicsRayQueryParameters3D.create(trunk_center + Vector3.LEFT * 2.0, trunk_center + Vector3.RIGHT * 2.0, 2)
+	var hit := world.get_world_3d().direct_space_state.intersect_ray(ray)
+	if not check(not hit.is_empty() and hit.collider == trees[0], "Generated trunk has collision"):
+		return
 	var start := player.position
+	var rocks := world.get_node("Rocks").get_children()
+	var sizes := {"small": 0, "medium": 0, "large": 0}
+	for rock in rocks:
+		sizes[rock.get_meta("size_category")] += 1
+		if not check_silent(Vector2(rock.position.x, rock.position.z).length() >= 14.0 + float(rock.get_meta("extent")), "Rocks respect spawn clearance"):
+			return
+	if not check(rocks.size() == 300 and sizes.small == 210 and sizes.medium == 75 and sizes.large == 15, "Rock count and small/medium/large proportions"):
+		return
+	var rock_center: Vector3 = rocks[0].global_position
+	var rock_ray := PhysicsRayQueryParameters3D.create(rock_center + Vector3.UP * 5.0, rock_center - Vector3.UP * 5.0, 4)
+	var rock_hit := world.get_world_3d().direct_space_state.intersect_ray(rock_ray)
+	if not check(not rock_hit.is_empty() and rock_hit.collider == rocks[0] and player.collision_mask & 4 != 0, "Rock collision is present and enabled for player"):
+		return
 	Input.action_press("move_forward")
 	for frame in range(60):
 		await physics_frame
@@ -80,4 +115,9 @@ func check(condition: bool, message: String) -> bool:
 		quit(1)
 		return false
 	print("PASS: " + message)
+	return true
+
+func check_silent(condition: bool, message: String) -> bool:
+	if not condition:
+		return check(false, message)
 	return true

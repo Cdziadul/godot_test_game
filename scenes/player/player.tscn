@@ -21,6 +21,7 @@ size = Vector3(0.14, 0.10, 0.17)
 albedo_color = Color(0.72, 0.48, 0.32, 1)
 
 [node name="Player" type="CharacterBody3D"]
+collision_mask = 7
 script = ExtResource("1")
 floor_snap_length = 0.3
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -38,6 +39,7 @@ mesh = SubResource("Nose")
 position = Vector3(0, 1.5, 0)
 script = ExtResource("2")
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraRig"]
+collision_mask = 7
 spring_length = 6.0
 margin = 0.2
 [node name="Camera3D" type="Camera3D" parent="CameraRig/SpringArm3D"]
