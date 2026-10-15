@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/player.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player/orbit_camera.gd" id="2"]
@@ -12,6 +12,13 @@ height = 1.8
 albedo_color = Color(0.95, 0.53, 0.16, 1)
 [sub_resource type="BoxMesh" id="Nose"]
 size = Vector3(0.22, 0.22, 0.35)
+
+[sub_resource type="BoxMesh" id="Forearm"]
+size = Vector3(0.12, 0.12, 0.38)
+[sub_resource type="BoxMesh" id="Hand"]
+size = Vector3(0.14, 0.10, 0.17)
+[sub_resource type="StandardMaterial3D" id="Skin"]
+albedo_color = Color(0.72, 0.48, 0.32, 1)
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1")
@@ -37,3 +44,30 @@ margin = 0.2
 current = true
 fov = 70.0
 far = 500.0
+
+[node name="FirstPersonCamera" type="Camera3D" parent="CameraRig"]
+fov = 70.0
+near = 0.03
+far = 500.0
+[node name="Hands" type="Node3D" parent="CameraRig/FirstPersonCamera"]
+visible = false
+[node name="LeftForearm" type="MeshInstance3D" parent="CameraRig/FirstPersonCamera/Hands"]
+position = Vector3(-0.26, -0.23, -0.35)
+mesh = SubResource("Forearm")
+material_override = SubResource("Material")
+cast_shadow = 0
+[node name="RightForearm" type="MeshInstance3D" parent="CameraRig/FirstPersonCamera/Hands"]
+position = Vector3(0.26, -0.23, -0.35)
+mesh = SubResource("Forearm")
+material_override = SubResource("Material")
+cast_shadow = 0
+[node name="LeftHand" type="MeshInstance3D" parent="CameraRig/FirstPersonCamera/Hands"]
+position = Vector3(-0.26, -0.23, -0.60)
+mesh = SubResource("Hand")
+material_override = SubResource("Skin")
+cast_shadow = 0
+[node name="RightHand" type="MeshInstance3D" parent="CameraRig/FirstPersonCamera/Hands"]
+position = Vector3(0.26, -0.23, -0.60)
+mesh = SubResource("Hand")
+material_override = SubResource("Skin")
+cast_shadow = 0

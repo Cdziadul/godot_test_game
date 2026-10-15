@@ -35,4 +35,4 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_font_sizes/font_size = 20
-text = "WASD  Move   |   Mouse  Orbit   |   Space  Jump\nEsc  Release mouse   |   Left click  Capture mouse"
+text = "WASD  Move   |   Mouse  Look   |   Space  Jump   |   V  Toggle view\nEsc  Release mouse   |   Left click  Capture mouse"

@@ -9,6 +9,9 @@ Import `project.godot` in Godot 4 (validated with 4.7.2), open it, and press **F
 - **WASD:** move relative to camera yaw.
 - **Mouse:** orbit the player, with limited vertical rotation.
 - **Space:** jump while grounded.
+- **V:** toggle third person / first person. First person hides the body and shows primitive hands and forearms. Position and look direction are preserved; movement and jumping work in both views.
+
+Select CameraRig in the player scene to configure the starting view and first-person eye height. Both views share mouse sensitivity and pitch limits. Hands are static primitive meshes; placement and near-terrain clipping need an interactive visual check.
 - **Esc:** release the pointer; **left click:** capture it again.
 
 Walking off the terrain eventually returns the player to the spawn point.
