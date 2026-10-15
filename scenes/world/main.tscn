@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/world/terrain.gd" id="2"]
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.19, 0.39, 0.65, 1)
+sky_horizon_color = Color(0.73, 0.83, 0.91, 1)
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.72, 0.82, 1, 1)
+ambient_light_energy = 0.5
+tonemap_mode = 2
+
+[node name="Main" type="Node3D"]
+[node name="Terrain" type="StaticBody3D" parent="."]
+script = ExtResource("2")
+[node name="Player" parent="." instance=ExtResource("1")]
+position = Vector3(0, 3, 0)
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-50, -30, 0)
+light_energy = 1.2
+shadow_enabled = true
+directional_shadow_max_distance = 100.0
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+[node name="HUD" type="CanvasLayer" parent="."]
+[node name="Controls" type="Label" parent="HUD"]
+offset_left = 24.0
+offset_top = 20.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 20
+text = "WASD  Move   |   Mouse  Orbit   |   Space  Jump\nEsc  Release mouse   |   Left click  Capture mouse"
